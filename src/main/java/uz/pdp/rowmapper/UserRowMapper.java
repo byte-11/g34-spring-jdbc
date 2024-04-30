@@ -3,12 +3,12 @@ package uz.pdp.rowmapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
-import uz.pdp.domain.User;
+import uz.pdp.domain.UserEntity;
 
-public class UserRowMapper implements RowMapper<User> {
+public class UserRowMapper implements RowMapper<UserEntity> {
     @Override
-    public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return User.builder()
+    public UserEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return UserEntity.builder()
                 .id(rs.getLong("id"))
                 .username(rs.getString("username"))
                 .email(rs.getString("email"))

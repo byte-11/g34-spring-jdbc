@@ -1,15 +1,16 @@
 package uz.pdp.controller;
 
+
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.pdp.doa.UserDao;
-import uz.pdp.domain.User;
+import uz.pdp.domain.UserEntity;
 
 @Controller
-@ResponseBody
 public class UserController {
 
     private final UserDao userDao;
@@ -18,55 +19,40 @@ public class UserController {
         this.userDao = userDao;
     }
 
-    @GetMapping("/users/save")
-    public String save() {
-        final User user = User.builder()
-                .email("emil@gmail.com")
-                .username("some-name")
-                .password("some-password")
-                .build();
+    @GetMapping("/signup")
+    public String pageSignUp(){
+        return "signup";
+    }
+
+    @GetMapping("/login")
+    public String pageLogin(){
+        return "login";
+    }
+
+    @PostMapping("/signup")
+    public String signUp(@ModelAttribute("user") UserEntity user){
         userDao.saveUser(user);
-        return user.toString();
+        return "redirect:/home";
     }
 
-    @GetMapping("/users/update/{userId}")
-    public String update(@PathVariable("userId") Long userId) {
-        final User user = User.builder()
-                .id(userId)
-                .email("emil2@gmail.com")
-                .username("some-name2")
-                .password("some-password2")
-                .build();
-        userDao.updateUser(user);
-        return user.toString();
+    @GetMapping("/user")
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public String userPage(){
+        return "USER_PAGE";
+    }
+    @GetMapping("/admin")
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    public String adminPage(){
+        return "ADMIN_PAGE";
     }
 
-    @GetMapping("/users/delete/{userId}")
-    public String delete(@PathVariable("userId") Long userId) {
-        userDao.deleteUser(userId);
-        return "redirect:/";
-    }
-
-    @GetMapping("/users/{id}")
-    public String getUserById(@PathVariable("id") Long id) {
-        User user = userDao.findUserById(id);
-        return user.toString();
-    }
-
-    @GetMapping("/users/all")
-    public String getAllUsers() {
-        return userDao.findAllUsers().toString();
-    }
-
-    @GetMapping("/users/simple")
-    public String getSimpleUsers() {
-        final User user = User.builder()
-                .email("simple@gmail.com")
-                .username("some-simple-name")
-                .password("simple-password")
-                .build();
-        userDao.saveWithSimpleJdbc(user);
-        return user.toString();
+    @GetMapping("/super-admin")
+    @ResponseBody
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    public String superAdminPage(){
+        return "SUPER_ADMIN_PAGE";
     }
 
 }
