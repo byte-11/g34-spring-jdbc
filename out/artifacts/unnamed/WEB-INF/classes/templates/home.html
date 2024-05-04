@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+    xmlns:th="https://www.thymeleaf.org/"
+>
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -8,5 +10,13 @@
     <h2>Hello From Home</h2>
     <h3 th:text="#{welcome}"></h3>
     <h3 th:text="${#messages.msg('welcome.user', 'Alex')}" ></h3>
+    <br>
+    <br>
+    <ul>
+        <li th:text="${user.id}"></li>
+        <li th:text="${user.username}"></li>
+        <li th:text="${user.email}"></li>
+        <li th:text="${user.password}"></li>
+    </ul>
 </body>
 </html>

@@ -2,6 +2,7 @@ package uz.pdp.doa;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -88,20 +89,12 @@ public class UserDao {
         );
     }
 
-    public UserEntity findUserById(final Long id) {
-        /*RowMapper<UserEntity> rowMapper = (rs, rowNum) -> {
-            return UserEntity.builder()
-                    .id(rs.getLong("id"))
-                    .username(rs.getString("username"))
-                    .email(rs.getString("email"))
-                    .password(rs.getString("password"))
-                    .build();
-        };*/
-        return jdbcTemplate.queryForObject(
+    public Optional<UserEntity> findUserById(final Long id) {
+        return Optional.ofNullable(jdbcTemplate.queryForObject(
                 "SELECT u.id, u.username, u.email, u.password FROM users u WHERE u.id = ?",
                 BeanPropertyRowMapper.newInstance(UserEntity.class),
                 id
-        );
+        ));
     }
 
     public List<UserEntity> findAllUsers() {
