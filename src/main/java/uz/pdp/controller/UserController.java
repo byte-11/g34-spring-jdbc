@@ -51,6 +51,7 @@ public class UserController {
     @GetMapping("/super-admin")
     @ResponseBody
     @PreAuthorize("hasRole('SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN')")
     public String superAdminPage(){
         return "SUPER_ADMIN_PAGE";
     }

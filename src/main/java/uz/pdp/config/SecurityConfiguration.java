@@ -20,10 +20,7 @@ public class SecurityConfiguration {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> registry
-                        .requestMatchers("/login", "/signup").permitAll()
-//                        .requestMatchers("/user").hasAnyRole("USER","ADMIN")
-//                        .requestMatchers("/admin").hasAnyRole("ADMIN", "SUPER_ADMIN")
-//                        .requestMatchers("/super-admin").hasRole("SUPER_ADMIN")
+                        .requestMatchers("/login", "/signup" ,"/home").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin
